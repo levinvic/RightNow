@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="tw.org.iii.rightnow">
+
+    <!--開放網路定位權限--><!--Google Map--><!--Google Place API-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--存取更準確位置權限--><!--Google Map--><!--Google Place API-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--存取網路權限--><!--Google Map--><!--Facebook sdk--><!--Google Place API-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!--懸浮視窗權限-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <!--電話簿讀取權限-->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!--有xml頁面的註冊 android:screenOrientation="portrait" 鎖屏-->
+        <activity android:name=".Live2dTop"/>
+        <activity android:name=".BOTActivityEvent"/>
+
+        <activity android:name=".rightnow">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!--google map API KEY-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key"/>
+
+
+    </application>
+
+</manifest>

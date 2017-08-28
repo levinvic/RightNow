@@ -1,0 +1,23 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "桃瀬ひより_t13.moc3",
+		"Textures": [
+			"桃瀬ひより_t13.2048/texture_00.png",
+			"桃瀬ひより_t13.2048/texture_01.png"
+		],
+		"Physics": "桃瀬ひより_t13.physics3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	]
+}

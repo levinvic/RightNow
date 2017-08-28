@@ -1,0 +1,9 @@
+{
+	"type": "Live2D Model Setting",
+	"name": "桃瀬ひより_t13",
+	"model": "桃瀬ひより_t13.moc",
+	"textures": [
+		"桃瀬ひより_t13.2048/texture_00.png",
+		"桃瀬ひより_t13.2048/texture_01.png"
+	]
+}

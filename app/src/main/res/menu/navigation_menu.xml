@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_favorite"
+        android:title="我的最愛"
+        android:icon="@mipmap/ic_favorite_black_24dp"/>
+    <item android:id="@+id/nav_settings"
+        android:title="設定"
+        android:icon="@mipmap/ic_build_black_24dp"/>
+    <item android:id="@+id/nav_logout"
+        android:title="登出"/>
+
+</menu>
