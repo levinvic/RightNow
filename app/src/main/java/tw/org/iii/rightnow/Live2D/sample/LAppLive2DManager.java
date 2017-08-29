@@ -202,7 +202,7 @@ public class LAppLive2DManager {
     //=========================================================
     // 	アプリケーションからのサンプルイベント
     //=========================================================
-	/*
+    /*
 	 * モデルの切り替え
 	 */
     public void changeModel() {
@@ -235,6 +235,13 @@ public class LAppLive2DManager {
         }
         return true;
     }
+    //抓動作用
+    public void TouchEvent(int num){
+        for (int i = 0; i < models.size(); i++) {
+            models.get(i).startMotion(LAppDefine.MOTION_GROUP_TAP_BODY,num,LAppDefine.PRIORITY_NORMAL);
+        }
+    }
+
 
     /*//自己寫的
     public boolean touchEvent() {

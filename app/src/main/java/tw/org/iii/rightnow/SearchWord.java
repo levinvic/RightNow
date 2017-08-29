@@ -256,6 +256,11 @@ class SearchWord {
                 StringInput = KeyWordDictionary.Operation;
             }
         }
+        for (int i=0;i<KeyDictionary.Operation2.length;i++) {
+            if (StringInput.indexOf(KeyDictionary.Operation2[i]) != -1) {
+                StringInput = KeyWordDictionary.Operation2;
+            }
+        }
 
 
 

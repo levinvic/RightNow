@@ -3,13 +3,12 @@ package tw.org.iii.rightnow;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import tw.org.iii.rightnow.Live2D.sample.LAppDefine;
-import tw.org.iii.rightnow.Live2D.sample.LAppLive2DManager;
-import tw.org.iii.rightnow.Live2D.sample.LAppModel;
 
-//此區專寫BOT回應在對話框上面的文字,
+
+//此區專寫BOT回應在對話框上面的文字,以及回答時的動作
 
 class BOTReturnWord {
+
     static String ResStr(String StringInput) {
         //取得系統時間物件
         Calendar cl = Calendar.getInstance();
@@ -21,81 +20,108 @@ class BOTReturnWord {
          */
         if (new BOTActivityEvent().Line(StringInput)) {
             BotResponseWordOnView = "賴已開啓";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Facebook(StringInput)) {
             BotResponseWordOnView = "臉書開了";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Album(StringInput)) {
             BotResponseWordOnView = "幫您開啓相簿";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Gmail(StringInput)) {
             BotResponseWordOnView = "居妹兒已開啓";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().民視(StringInput)) {
             BotResponseWordOnView = "已經幫您開啓民視直播";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().台視(StringInput)) {
             BotResponseWordOnView = "已經幫您開啓台視直播";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().華視(StringInput)) {
             BotResponseWordOnView = "已經幫您開啓華視直播";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().中視(StringInput)) {
             BotResponseWordOnView = "已經幫您開啓中視直播";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().東森(StringInput)) {
             BotResponseWordOnView = "已經幫您開啓東森直播";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().滾石老歌(StringInput)) {
             BotResponseWordOnView = "每個人心中都有一首滾石老歌";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().中天(StringInput)) {
             BotResponseWordOnView = "幫你開中天直播";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().公視(StringInput)) {
             BotResponseWordOnView = "已經幫你開啓公視";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().三立(StringInput)) {
             BotResponseWordOnView = "已經幫你開啓三立直播";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Ptt(StringInput)) {
             BotResponseWordOnView = "開啓Ptt中, 請稍等";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Messenger(StringInput)) {
             BotResponseWordOnView = "幫您開啓臉書聊天室";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Chrome(StringInput)) {
             BotResponseWordOnView = "幫您開啓Chrome瀏覽器";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Weather(StringInput)) {
             BotResponseWordOnView = "幫您開啓內建氣象APP";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().GoogleMap(StringInput)) {
             BotResponseWordOnView = "幫您開啓內建谷歌地圖";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Skype(StringInput)) {
             BotResponseWordOnView = "正在開啓Skype, 請稍候";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Calendar(StringInput)) {
             BotResponseWordOnView = "幫您開啓內建行事曆";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Youtube(StringInput)) {
             BotResponseWordOnView = "Youtube開啓中, 請稍等";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Twitch(StringInput)) {
             BotResponseWordOnView = "幫你開啓Twitch遊戲直播";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
+
         } else if (new BOTActivityEvent().Twitter(StringInput)) {
             BotResponseWordOnView = "推特開啓中, 請稍等";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().Draw(StringInput)) {
             BotResponseWordOnView = "幫你開啓內建繪圖";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().GoogleMapGuideCheck(StringInput)) {
             BotResponseWordOnView = "幫你導引至" +
                     new BOTActivityEvent().GoogleMapGuide(StringInput) + "目的地";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
 
         } else if (new BOTActivityEvent().附近的Check(StringInput)) {
             BotResponseWordOnView = "已幫你找到附近" + new BOTActivityEvent().附近的(StringInput) + "的位置";
+            Live2dTop.live2DMgr.TouchEvent(PackDictionary.就這樣);
         }
 
 
@@ -230,6 +256,10 @@ class BOTReturnWord {
             //計算機
             BotResponseWordOnView = new BOTActivityEvent().calculationYet(StringInput)
                     + " ,我算出來的結果是\"" + new BOTActivityEvent().calculation(StringInput) + "\" ,我厲害吧";
+        }else if (new BOTActivityEvent().Operation2(StringInput)) {
+            //計算機2
+            BotResponseWordOnView = StringInput
+                    + " ,我算出來的結果是\"" + new BOTActivityEvent().calculation2(StringInput) + "\" 元,我厲害吧";
         }
 
         /*

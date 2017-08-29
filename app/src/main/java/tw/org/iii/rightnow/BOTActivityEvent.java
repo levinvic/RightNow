@@ -699,6 +699,15 @@ public class BOTActivityEvent extends Activity {
         return operation;
     }
 
+    public Boolean Operation2(String StringInput){
+        Boolean operation = false;
+        for (int i = 0; i < KeyDictionary.Operation2.length; i++) {
+            if (StringInput.indexOf(KeyDictionary.Operation2[i]) != -1)
+                operation = true;
+        }
+        return operation;
+    }
+
 
     public String calculationYet(String StringInput) {
         String operation = "";
@@ -737,12 +746,20 @@ public class BOTActivityEvent extends Activity {
                         .replace("加", "+").replace("家", "+").replace("教", "+")
                         .replace("減", "-").replace("簡", "-").replace("件", "-").replace("錢", "-")
                         .replace("乘", "*").replace("成語", "*").replace("陳", "*").replace("成", "*")
-                        .replace("除", "/").replace("著", "/").replace("出", "/").replace("錯", "/")
-                        .replace("一", "1").replace("二", "2").replace("三", "3").replace("四", "4")
-                        .replace("五", "5").replace("六", "6").replace("七", "7").replace("八", "8")
-                        .replace("九", "9").replace("壹", "1").replace("貳", "2").replace("零", "0")
-                        .replace("參", "3").replace("肆", "4").replace("伍", "5").replace("陸", "6")
-                        .replace("柒", "7").replace("捌", "8").replace("玖", "9");
+                        .replace("除", "/").replace("著", "/").replace("出", "/").replace("錯", "/");
+                Operation=replace(Operation,KeyDictionary.nums_1,KeyWordDictionary.num_1);
+                Operation=replace(Operation,KeyDictionary.nums_2,KeyWordDictionary.num_2);
+                Operation=replace(Operation,KeyDictionary.nums_3,KeyWordDictionary.num_3);
+                Operation=replace(Operation,KeyDictionary.nums_4,KeyWordDictionary.num_4);
+                Operation=replace(Operation,KeyDictionary.nums_5,KeyWordDictionary.num_5);
+                Operation=replace(Operation,KeyDictionary.nums_6,KeyWordDictionary.num_6);
+                Operation=replace(Operation,KeyDictionary.nums_7,KeyWordDictionary.num_7);
+                Operation=replace(Operation,KeyDictionary.nums_8,KeyWordDictionary.num_8);
+                Operation=replace(Operation,KeyDictionary.nums_9,KeyWordDictionary.num_9);
+                Operation=replace(Operation,KeyDictionary.nums_10,KeyWordDictionary.num_10);
+                Operation=replace(Operation,KeyDictionary.nums_100,KeyWordDictionary.num_100);
+                Operation=replace(Operation,KeyDictionary.nums_1000,KeyWordDictionary.num_1000);
+                Operation=replace(Operation,KeyDictionary.nums_10000,KeyWordDictionary.num_10000);
                 break;
             }
         }
@@ -798,6 +815,50 @@ public class BOTActivityEvent extends Activity {
             return String.format("%.2f", ansres);
         }
 
+    }
+
+    public String calculation2(String StringInput){
+        String input=StringInput;
+        input=replace(input,KeyDictionary.nums_1,KeyWordDictionary.num_1);
+        input=replace(input,KeyDictionary.nums_2,KeyWordDictionary.num_2);
+        input=replace(input,KeyDictionary.nums_3,KeyWordDictionary.num_3);
+        input=replace(input,KeyDictionary.nums_4,KeyWordDictionary.num_4);
+        input=replace(input,KeyDictionary.nums_5,KeyWordDictionary.num_5);
+        input=replace(input,KeyDictionary.nums_6,KeyWordDictionary.num_6);
+        input=replace(input,KeyDictionary.nums_7,KeyWordDictionary.num_7);
+        input=replace(input,KeyDictionary.nums_8,KeyWordDictionary.num_8);
+        input=replace(input,KeyDictionary.nums_9,KeyWordDictionary.num_9);
+        input=replace(input,KeyDictionary.nums_10,KeyWordDictionary.num_10);
+        input=replace(input,KeyDictionary.nums_100,KeyWordDictionary.num_100);
+        input=replace(input,KeyDictionary.nums_1000,KeyWordDictionary.num_1000);
+        input=replace(input,KeyDictionary.nums_10000,KeyWordDictionary.num_10000);
+        //將字串內非數字用空質取代
+        String[] strlistres=input.trim().split("\\D");
+        ArrayList<String> strlist=new ArrayList<String>();
+        for(int i=0;i<strlistres.length;i++){
+            if(!"".equals(strlistres[i]))
+                strlist.add(strlistres[i]);
+        }
+        double ansres=0;
+        if(strlist.size()==3){
+            ansres=(Integer.parseInt(strlist.get(1)))/(Integer.parseInt(strlist.get(0)))*(Integer.parseInt(strlist.get(2)));
+        }else if(strlist.size()==2){
+            ansres=(Integer.parseInt(strlist.get(0)))*(Integer.parseInt(strlist.get(1)));
+        }
+
+        if(ansres%1==0){
+            return String.format("%.0f",ansres);
+        }else{
+            return String.format("%.2f",ansres);
+        }
+    }
+
+    private String replace(String input,String[] check,String replace){
+        String response=input;
+        for (String i:check){
+            response=response.replace(i,replace);
+        }
+        return response;
     }
 
     //等待用的方法

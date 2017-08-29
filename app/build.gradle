@@ -39,4 +39,6 @@ dependencies {
     //ITRITTS
     compile files('libs/ksoap2-android-assembly-3.6.2.jar')
     compile 'com.google.code.ksoap2-android:ksoap2-android:3.6.2'
+    //progressbar
+    compile 'com.wang.avi:library:2.1.3'
 }

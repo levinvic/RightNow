@@ -7,8 +7,8 @@ package tw.org.iii.rightnow;
 class KeyWordDictionary {
     static final String tip = "tip";
     static final String 台語 = "台語";
-    static final String 國語= "國語";
-    static final String 小女孩="小女孩";
+    static final String 國語 = "國語";
+    static final String 小女孩 = "小女孩";
     static final String 相簿 = "Album";
     static final String Facebook = "Facebook";
     static final String Line = "Line";
@@ -47,6 +47,24 @@ class KeyWordDictionary {
     static final String GoogleMapGuide = "怎麼走";
     static final String 附近的 = "附近的";
     static final String Operation = "Operation";
+    static final String Operation2 = "Operation2";
+    //計算用
+    static final String num_0 = "0";
+    static final String num_1 = "1";
+    static final String num_2 = "2";
+    static final String num_3 = "3";
+    static final String num_4 = "4";
+    static final String num_5 = "5";
+    static final String num_6 = "6";
+    static final String num_7 = "7";
+    static final String num_8 = "8";
+    static final String num_9 = "9";
+    static final String num_10 = "10";
+    static final String num_100 = "100";
+    static final String num_1000 = "1000";
+    static final String num_10000 = "10000";
+
+
 
 
 }

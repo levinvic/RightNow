@@ -90,6 +90,17 @@ class PackDictionary {
     final static String tip39 = "想聽老歌嗎, 跟我說滾石老歌我可以開音樂給你聽, 二十四小時不間斷, 歡樂一整天";
     final static String tip40 = "我的房間會隨不同的時間而有不同的亮度喔";
 
+    static int 需要幫忙嗎 = 0;
+    static int 拍腿 = 1;
+    static int 摸摸頭 = 2;
+    static int 點頭 = 3;
+    static int 生氣 = 4;
+    static int 搖頭 = 5;
+    static int 思考 = 6;
+    static int 就這樣 = 7;
+    static int 好高興 = 8;
+    static int 嚇到 = 9;
+
 
 
 

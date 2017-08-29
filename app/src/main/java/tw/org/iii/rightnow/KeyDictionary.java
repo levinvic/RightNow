@@ -11,8 +11,9 @@ class KeyDictionary {
     //自訂程式
     static final String[] tips = {"你會什麼", "你會做什麼", "提示", "tip", "功能", "你可以幫我什麼", "說明", "哈囉", "哈嚕",
             "跟我講話", "Sony", "羅敏", "你還會什麼", "你還會做什麼"};
-    static final String[] Operation = {"幫我算", "泡菜","Watson","花生","哇省","防衛省","蘭花繩","幫我省"};
-    static final String[] 故事 = {"故事","郭書","讀書","gosu","二叔","溝鼠","購書","過數","複數","布書","讀書","告書"};
+    static final String[] Operation = {"幫我算", "泡菜", "Watson", "花生", "哇省", "防衛省", "蘭花繩", "幫我省"};
+    static final String[] Operation2 = {"多少錢", "多少"};
+    static final String[] 故事 = {"故事", "郭書", "讀書", "gosu", "二叔", "溝鼠", "購書", "過數", "複數", "布書", "讀書", "告書"};
     static final String[] 打電話給 = {"打電話給", "打電話", "打給"};
     //內建APP
     static final String[] Album = {"相簿", "相片", "照片", "畫像皮", "橡皮", "用品", "臭屁", "送筆",
@@ -50,7 +51,7 @@ class KeyDictionary {
     static final String[] 大樂透 = {"大樂透"};
     static final String[] 發票 = {"發票"};
     //開瀏覽器
-    static final String[] 開Chrome搜尋 = {"幫我找", "幫我查", "我想找", "我想查", "我要查", "我要找"};
+    static final String[] 開Chrome搜尋 = {"幫我找", "幫我查", "我想找", "我想查", "我要查", "我要找", "澎湖找"};
     static final String[] 卡提諾 = {"卡提諾"};
     static final String[] 維基 = {"是什麼", "什麼是"};
     static final String[] 前往對獎 = {"前往對獎"};
@@ -61,6 +62,20 @@ class KeyDictionary {
 
     //開Google導覽
     static final String[] GoogleMapGuide = {"怎麼走", "怎麼去", "帶我去", "帶我到", "我想去", "我想到", "我要去", "我要到"};
-    static final String[] 附近的 = {"附近的", "附近", "周遭的", "鄰近的", "找附近","幫我找找"};
+    static final String[] 附近的 = {"附近的", "附近", "周遭的", "鄰近的", "找附近", "幫我找找"};
 
+    //文字轉數字用
+    static final String[] nums_1 = {"一", "壹"};
+    static final String[] nums_2 = {"二", "兩", "貳"};
+    static final String[] nums_3 = {"三", "參"};
+    static final String[] nums_4 = {"四", "是", "肆"};
+    static final String[] nums_5 = {"五", "虎", "伍"};
+    static final String[] nums_6 = {"六", "陸"};
+    static final String[] nums_7 = {"七", "柒"};
+    static final String[] nums_8 = {"八", "吧", "捌"};
+    static final String[] nums_9 = {"九", "玖"};
+    static final String[] nums_10 = {"十", "拾", "什", "石"};
+    static final String[] nums_100 = {"一百"};
+    static final String[] nums_1000 = {"千", "仟"};
+    static final String[] nums_10000 = {"一萬"};
 }

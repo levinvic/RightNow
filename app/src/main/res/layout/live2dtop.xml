@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context="tw.org.iii.rightnow.Live2dTop">
 
-
     <FrameLayout
         android:id="@+id/live2DLayout"
         android:layout_width="match_parent"
@@ -18,8 +17,32 @@
 
         <include
             layout="@layout/navigation_actionbox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/avi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:indicatorColor="@android:color/black"
+            app:indicatorName="LineScalePartyIndicator" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btn_dictionary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/dictionary" />
+
+        </LinearLayout>
 
 
         <LinearLayout
@@ -41,95 +64,106 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_marginBottom="60dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/nameId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:background="@drawable/style_live2dtop"
                 android:text="  哈嚕  "
                 android:textColor="#0000FF"
-                android:textSize="25dp" />
+                android:textSize="25dp"
+                />
 
             <TextView
                 android:id="@+id/txtDialog"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:background="@drawable/style_live2dtop1"
-                android:padding="20dp"
+                android:maxLines="10"
+                android:padding="10dp"
+                android:scrollbars="vertical"
                 android:text="嗯.....嗯嗯?\n\n\n"
                 android:textSize="30dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_margin="10dp">
+            android:layout_gravity="bottom">
 
             <ImageButton
                 android:id="@+id/imageButton1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@null"
+                android:padding="5dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/icon_gear" />
+                android:src="@drawable/changemod" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btnRepeatSpeak"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="重複" />
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/repeat" />
 
-            <Button
+
+            <ImageButton
                 android:id="@+id/btnClearView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="清除" />
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/cleantext" />
 
-            <Button
+
+            <ImageButton
                 android:id="@+id/btnStopSpeak"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1"
-                android:text="停止" />
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/stopspeak" />
+
 
             <ImageButton
                 android:id="@+id/btn_speak"
-                android:layout_width="56dp"
-                android:layout_height="61dp"
-                android:layout_weight="0.29"
-                android:src="@drawable/mic" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <!--下面初始都隱藏的-->
-            <VideoView
-                android:id="@+id/videoView01"
-                android:layout_width="1dp"
-                android:layout_height="1dp" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone" />
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@null"
+                android:padding="5dp"
+                android:src="@drawable/speak" />
 
         </LinearLayout>
 
+        <VideoView
+            android:id="@+id/videoView01"
+            android:layout_width="1dp"
+            android:layout_height="1dp" />
 
     </FrameLayout>
-
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

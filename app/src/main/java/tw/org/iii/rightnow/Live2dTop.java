@@ -15,36 +15,32 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.ContactsContract;
 import android.speech.RecognizerIntent;
-import android.speech.RecognizerResultsIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.transition.Visibility;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
-import android.widget.ProgressBar;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +49,8 @@ import android.widget.VideoView;
 //import com.bigkoo.pickerview.OptionsPickerView;
 //
 
+
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -64,9 +62,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import jp.live2d.ALive2DModel;
-import jp.live2d.motion.AMotion;
-import jp.live2d.motion.MotionQueueManager;
 import tw.org.iii.rightnow.FloatView.FloatWindowManager;
 import tw.org.iii.rightnow.ITRITTSSpeaker.TTSCHI;
 import tw.org.iii.rightnow.ITRITTSSpeaker.TTSTAW;
@@ -74,10 +69,8 @@ import tw.org.iii.rightnow.Live2D.android.FileManager;
 import tw.org.iii.rightnow.Live2D.android.SoundManager;
 import tw.org.iii.rightnow.Live2D.sample.LAppDefine;
 import tw.org.iii.rightnow.Live2D.sample.LAppLive2DManager;
-import tw.org.iii.rightnow.Live2D.sample.LAppModel;
 import tw.org.iii.rightnow.Live2D.sample.LAppView;
 
-import static tw.org.iii.rightnow.R.*;
 import static tw.org.iii.rightnow.R.layout.live2dtop;
 
 /*
@@ -85,10 +78,10 @@ import static tw.org.iii.rightnow.R.layout.live2dtop;
  */
 public class Live2dTop extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        TTSCHI.AsyncResponseCHI, TTSTAW.AsyncResponseTAW{
+        TTSCHI.AsyncResponseCHI, TTSTAW.AsyncResponseTAW {
     //TODO 全域變數位置
-    private LAppLive2DManager live2DMgr;//  Live2Dの管理
-    static private Activity instance; //????啥
+    public static LAppLive2DManager live2DMgr;//  Live2Dの管理
+    static private Activity instance; //????啥鬼
     String KeyWord; //關鍵字
     String BotSpeakWord; //BOT語音
     ArrayList<String> ResList; //輸入進來的文字
@@ -101,11 +94,28 @@ public class Live2dTop extends AppCompatActivity implements
     private ActionBarDrawerToggle mToggle; //元件觸發
     //private Toolbar mToolboar;
     private ArrayList<String> options1Items = new ArrayList<>(); //PickerView
-    //private ArrayList<ArrayList<String>> options2Items = new ArrayList<>(); 第二選單時使用
     //TODO pickerView
     //private OptionsPickerView pvOptions;
-    int ttsNumberset = 0; //語音選擇
+    static int ttsNumberset = 0; //語音選擇
+    private int ViewStatus = 0; //顯示對話畫面狀態
+    //重復對話用的
+    String uri_chi; //小女孩音檔uri(網址)
+    String uri_taw; //台語音檔uri(網址)
 
+
+    //功能字庫
+    private OnClickListener btnDictionary_click = new OnClickListener() {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        @Override
+        public void onClick(View v) {
+            //對話框隱藏
+            tvdialog.setVisibility(View.GONE);
+            nameId.setVisibility(View.GONE);
+            //啓動上側浮動選單
+            projectpopupwindow = new ProjectPopupWindows(Live2dTop.this);
+            projectpopupwindow.showAtLocation(Live2dTop.this.findViewById(R.id.drawerLayout), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+        }
+    };
 
     //閉嘴
     private OnClickListener btnStopSpeak_click = new OnClickListener() {
@@ -117,23 +127,47 @@ public class Live2dTop extends AppCompatActivity implements
         }
     };
 
-    //清除畫面
-    private OnClickListener btnClearView_click = new OnClickListener() {
+
+    //畫面畫面
+    private OnClickListener btnSwitchSpeakView_click = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            tvdialog.setText("");
-            new LAppLive2DManager().tapEvent(0.07962966f,-0.1842593f);
-
+            if (ViewStatus == 0) {
+                nameId.setVisibility(View.GONE);
+                tvdialog.setVisibility(View.GONE);
+                ViewStatus = 1;
+            } else if (ViewStatus == 1) {
+                nameId.setVisibility(View.VISIBLE);
+                tvdialog.setVisibility(View.VISIBLE);
+                ViewStatus = 0;
+            }
         }
     };
 
-    //重複對話
+
+    //重複對話, 抓上一次回傳的音檔網址
     private OnClickListener btnRepeatSpeak_click = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+//            startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+            switch (ttsNumberset){
+                case 0:
+                    tts.speak(tvdialog.getText().toString(), TextToSpeech.QUEUE_FLUSH, null);
+                    break;
+                case 1:
+                    videoView.setVideoURI(Uri.parse(uri_chi));
+                    videoView.requestFocus();
+                    videoView.start();
+                    break;
+                case 2:
+                    videoView.setVideoURI(Uri.parse(uri_taw));
+                    videoView.requestFocus();
+                    videoView.start();
+                    break;
+            }
         }
     };
+
 
     //畫面右上角時鐘按下去時
     private OnClickListener btnClock_click = new OnClickListener() {
@@ -144,8 +178,9 @@ public class Live2dTop extends AppCompatActivity implements
             String str = sdf.format(cl.getTime());
 
             //TTS(google)
-            progressbar.setVisibility(View.VISIBLE);
+            Log.i("shiaukai", "執行緒進入前");
             startSpeakVoice(ttsNumberset, "現在時間" + str);
+            Log.i("shiaukai", "執行緒進入後");
         }
     };
 
@@ -159,7 +194,6 @@ public class Live2dTop extends AppCompatActivity implements
         SoundManager.init(this);
         live2DMgr = new LAppLive2DManager();
     }
-
 
     // ボタンを押した時のイベント /Button按下去時的事件
     class ClickListener implements OnClickListener {
@@ -176,27 +210,24 @@ public class Live2dTop extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
+                //顯示對話方塊
+                nameId.setVisibility(View.VISIBLE);
+                tvdialog.setVisibility(View.VISIBLE);
 
                 //語音輸入存入ArrayList<String>
                 ResList = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
                 //BOT回應在對話框上的文字
                 BotSpeakWord = BOTReturnWord.ResStr(ResList.get(0));
-                tvdialog.setText(BotSpeakWord + "\n\n\n");
+                tvdialog.setText(BotSpeakWord);
+
 
                 //分析輸入文字, 輸出成關鍵字存在一個字串變數中, 一次性搜尋
                 KeyWord = SearchWord.SEARCH(ResList.get(0));
 
-                //new LAppLive2DManager().touchEvent();
-
-                //Progressbar出現
-                progressbar.setVisibility(View.VISIBLE);
-
-
                 //TODO 判斷String關鍵字
                 switch (KeyWord) {
                     //TODO 整合性功能
-
                     case KeyWordDictionary.相簿:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
                         startCheckAPP(PackDictionary.Album);
@@ -285,6 +316,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.台視:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.ttv"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.TTV)));
@@ -292,6 +324,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.華視:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.cts"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.CTS)));
@@ -299,6 +332,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.中視:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.ctv"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.CTV)));
@@ -306,6 +340,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.民視:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.ftv"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.FTV)));
@@ -313,6 +348,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.東森:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.ebc"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.EBC)));
@@ -320,6 +356,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.中天:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.cti"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.CTI)));
@@ -327,6 +364,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.三立:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.set"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.SET)));
@@ -334,6 +372,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.公視:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.pts"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.PTS)));
@@ -341,6 +380,7 @@ public class Live2dTop extends AppCompatActivity implements
                         break;
                     case KeyWordDictionary.滾石老歌:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        new BOTActivityEvent().startTV(Uri.parse("R.raw.old"));
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PackDictionary.OLD)));
@@ -397,7 +437,7 @@ public class Live2dTop extends AppCompatActivity implements
                     case KeyWordDictionary.國語:
                         ttsNumberset = 0;
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
-                        nameId.setText("  青年哈嚕  ");
+                        nameId.setText("  壯年哈嚕  ");
                         break;
                     case KeyWordDictionary.小女孩:
                         ttsNumberset = 1;
@@ -416,6 +456,9 @@ public class Live2dTop extends AppCompatActivity implements
                     case KeyWordDictionary.Operation:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
                         break;
+                    case KeyWordDictionary.Operation2:
+                        startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
+                        break;
                     default:
                         //講畫面上的字
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
@@ -432,22 +475,18 @@ public class Live2dTop extends AppCompatActivity implements
     }
 
 
-
-
     //TODO BOT講話要啓動的種類寫在這, google語音為0, 工研院小女孩語音為1,台語發音為2
     void startSpeakVoice(int ttsNumber, String speakWord) {
         TTSCHI ttschi = new TTSCHI(this);
         TTSTAW ttstaw = new TTSTAW(this);
         if (ttsNumber == 0) {
             //google語音TTS方法寫在這
-            progressbar.setVisibility(View.GONE);
             tts.speak(speakWord, TextToSpeech.QUEUE_FLUSH, null);
         }
         if (ttsNumber == 1) {
             //工研院的語音TTS方法寫在這(小女孩)
             try {
-                ttschi.execute(speakWord).get(3000, TimeUnit.MILLISECONDS);
-                progressbar.setVisibility(View.GONE);
+                ttschi.execute(speakWord).get(5000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 Log.i("shiaukai", "終止例外");
             } catch (ExecutionException e) {
@@ -456,14 +495,13 @@ public class Live2dTop extends AppCompatActivity implements
                 Log.i("shiaukai", "逾時例外");
                 ttschi.cancel(true);
                 Toast.makeText(getApplicationContext(), "連線逾時，改由Google小姐回答", Toast.LENGTH_SHORT).show();
-                progressbar.setVisibility(View.GONE);
                 tts.speak(speakWord, TextToSpeech.QUEUE_FLUSH, null);
             }
         }
         if (ttsNumber == 2) {
             //工研院的語音TTS方法寫在這(台語)
             try {
-                ttstaw.execute(speakWord).get(3000, TimeUnit.MILLISECONDS);
+                ttstaw.execute(speakWord).get(10000, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
                 Log.i("shiaukai", "終止例外");
             } catch (ExecutionException e) {
@@ -472,10 +510,29 @@ public class Live2dTop extends AppCompatActivity implements
                 Log.i("shiaukai", "逾時例外");
                 ttstaw.cancel(true);
                 Toast.makeText(getApplicationContext(), "連線逾時，改由Google小姐回答", Toast.LENGTH_SHORT).show();
-                progressbar.setVisibility(View.GONE);
                 tts.speak(speakWord, TextToSpeech.QUEUE_FLUSH, null);
             }
         }
+    }
+
+
+    //實作小女孩語音方法
+    @Override
+    public void processFinishCHI(String output) {
+        uri_chi = output;
+
+        videoView.setVideoURI(Uri.parse(output));
+        videoView.requestFocus();
+        videoView.start();
+    }
+
+    //實作台語語音方法
+    @Override
+    public void processFinishTAW(String output) {
+        uri_taw = output;
+        videoView.setVideoURI(Uri.parse(output));
+        videoView.requestFocus();
+        videoView.start();
     }
 
     //GPS定位導向內建GoogleMap導航
@@ -558,6 +615,7 @@ public class Live2dTop extends AppCompatActivity implements
                 //開啓圓形功能列
                 FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                 startActivity(it);
+                finish();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -676,6 +734,7 @@ public class Live2dTop extends AppCompatActivity implements
     //TODO 撥號給聯絡人
     void startCall() {
         //API 23開始開放權限除了一般權限外還有危險權限
+        avi.show();
         if (Build.VERSION.SDK_INT >= 23) {
 
             if (checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -779,11 +838,10 @@ public class Live2dTop extends AppCompatActivity implements
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             dialog();
             return false;
-        }else{
-            return super.onKeyDown(keyCode, event); //沒有event事件音量鍵無法點選
+        } else {
+            return super.onKeyDown(keyCode, event);
         }
     }
-
 
 
     private void dialog() {
@@ -806,21 +864,19 @@ public class Live2dTop extends AppCompatActivity implements
     @Override
     protected void onResume() {
         //live2DMgr.onResume() ;
-        super.onResume();//Activity重開時Event
         FloatWindowManager.getInstance().dismissWindow();
+        super.onResume();//Activity重開時Event
     }
 
     @Override
     protected void onStop() {
+        //開啓圓形功能列
+        if (FloatWindowManager.getInstance().checkfloatwindowPermission(this) == true) {
+            FloatWindowManager.getInstance().openFloatWindow(this);
+        }
+
         super.onStop();
-        FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
 
     @Override
     protected void onPause() {
@@ -898,26 +954,13 @@ public class Live2dTop extends AppCompatActivity implements
 ////        pvOptions.setPicker(options1Items/*, options2Items*/);
 ////    }
 
-    @Override
-    public void processFinishTAW(String output) {
-        progressbar.setVisibility(View.GONE);
-        videoView.setVideoURI(Uri.parse(output));
-        videoView.requestFocus();
-        videoView.start();
-    }
 
-    @Override
-    public void processFinishCHI(String output) {
-        progressbar.setVisibility(View.GONE);
-        videoView.setVideoURI(Uri.parse(output));
-        videoView.requestFocus();
-        videoView.start();
-    }
 
 
     /*
      * Activityが作成されたときのイベント
      */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -925,12 +968,14 @@ public class Live2dTop extends AppCompatActivity implements
         //TTS(google)物件初始化
         CreateLanguageTTS();
         setupGUI();
-        if(FloatWindowManager.getInstance().checkfloatwindowPermission(this)==false){
+        if (FloatWindowManager.getInstance().checkfloatwindowPermission(this) == false) {
             FloatWindowManager.getInstance().floatwindowPermission(this);
         }
+        //一開始先把對話框隱藏起來
+        nameId.setVisibility(View.GONE);
+        tvdialog.setVisibility(View.GONE);
 
         FileManager.init(this.getApplicationContext());
-
 
     }
 
@@ -945,35 +990,41 @@ public class Live2dTop extends AppCompatActivity implements
         //  Viewの初期化
         view = live2DMgr.createView(this);
 
-                // activity_main.xmlにLive2DのViewをレイアウトする
-                layout = (FrameLayout) findViewById(id.live2DLayout);
-                layout.addView(view, 0, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        // activity_main.xmlにLive2DのViewをレイアウトする
+        layout = (FrameLayout) findViewById(R.id.live2DLayout);
+        layout.addView(view, 0, new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
-                // モデル切り替えボタン /Model切換用Button
-                iBtn = (ImageButton) findViewById(id.imageButton1);
-                iBtn.setOnClickListener(new ClickListener());
+        // モデル切り替えボタン /Model切換用Button
+        iBtn = (ImageButton) findViewById(R.id.imageButton1);
+        iBtn.setOnClickListener(new ClickListener());
 
-                //設定說話按鈕點擊後STT設定物件
-                btn_speak = (ImageButton) findViewById(id.btn_speak);
-                btn_speak.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent it = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                        it.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-                        it.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
-                        it.putExtra(RecognizerIntent.EXTRA_PROMPT,"請說話.....");
+        //設定說話按鈕點擊後STT設定物件
+        btn_speak = (ImageButton) findViewById(R.id.btn_speak);
+        btn_speak.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //停止前面的話, 重新講話
+                tts.stop();
+                videoView.stopPlayback();
+
+                Intent it = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                it.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+//                it.putExtra(RecognizerIntent.EXTRA_PROMPT, "請說話......");
                 startActivityForResult(it, 1);
             }
         });
 
-        tvdialog = (TextView) findViewById(id.txtDialog);
-        btnStopSpeak = (Button) findViewById(id.btnStopSpeak);
+        tvdialog = (TextView) findViewById(R.id.txtDialog);
+        tvdialog.setMovementMethod(ScrollingMovementMethod.getInstance());
+        btnStopSpeak = (ImageButton) findViewById(R.id.btnStopSpeak);
         btnStopSpeak.setOnClickListener(btnStopSpeak_click);
-        btnClearView = (Button) findViewById(id.btnClearView);
-        btnClearView.setOnClickListener(btnClearView_click);
-        btnRepeatSpeak = (Button) findViewById(id.btnRepeatSpeak);
+        btnClearView = (ImageButton) findViewById(R.id.btnClearView);
+        btnClearView.setOnClickListener(btnSwitchSpeakView_click);
+        btnRepeatSpeak = (ImageButton) findViewById(R.id.btnRepeatSpeak);
         btnRepeatSpeak.setOnClickListener(btnRepeatSpeak_click);
-        btnClock = (TextClock) findViewById(id.btnClock);
+        btnDictionary = (ImageButton) findViewById(R.id.btn_dictionary);
+        btnDictionary.setOnClickListener(btnDictionary_click);
+        btnClock = (TextClock) findViewById(R.id.btnClock);
         btnClock.setOnClickListener(btnClock_click);
         mgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -981,7 +1032,7 @@ public class Live2dTop extends AppCompatActivity implements
         //mToolboar = (Toolbar) findViewById(R.id.nav_action);
         //setSupportActionBar(mToolboar);//Toolbar取代原本的ActionBar
 
-        mDrawerLayout = (DrawerLayout) findViewById(id.drawerLayout); //在Fragment下面的Activity
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout); //在Fragment下面的Activity
         //上側ToolBar
         //mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);//必須用字串資源檔
         //mDrawerLayout.addDrawerListener(mToggle);//工具欄監聽事件
@@ -989,7 +1040,7 @@ public class Live2dTop extends AppCompatActivity implements
         //mToggle.syncState();
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);//隱藏顯示箭頭返回
 
-        navigationView = (NavigationView) findViewById(id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);//清單觸發監聽事件
 
         /*PickerView
@@ -998,16 +1049,17 @@ public class Live2dTop extends AppCompatActivity implements
         TODO pickerView
         initOptionPicker();
         */
+
         //progressbar
-        progressbar = (ProgressBar) findViewById(id.progressBar);
-        progressbar.setVisibility(View.GONE);
+        avi = (AVLoadingIndicatorView) findViewById(R.id.avi);
         //
 
         //videoView
-        videoView = (VideoView) this.findViewById(id.videoView01);
+        videoView = (VideoView) this.findViewById(R.id.videoView01);
         MediaController mc = new MediaController(this);
         videoView.setMediaController(mc);
-        nameId = (TextView) findViewById(id.nameId);
+        nameId = (TextView) findViewById(R.id.nameId);
+        //
     }
 
     //TODO 自建View元件
@@ -1017,13 +1069,16 @@ public class Live2dTop extends AppCompatActivity implements
     ImageButton btn_speak;
     static TextView tvdialog;
     TextToSpeech tts;
-    Button btnStopSpeak;
-    Button btnClearView;
-    Button btnRepeatSpeak;
+    ImageButton btnStopSpeak;
+    ImageButton btnClearView;
+    ImageButton btnRepeatSpeak;
+    ImageButton btnDictionary;
     TextClock btnClock;
-    ProgressBar progressbar;
     VideoView videoView;
-
+    //progressbar
+    AVLoadingIndicatorView avi;
+    //動態浮動視窗
+    ProjectPopupWindows projectpopupwindow;
     NavigationView navigationView; //側邊選單
     TextView nameId;
 
