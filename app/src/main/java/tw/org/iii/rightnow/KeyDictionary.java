@@ -10,7 +10,7 @@ class KeyDictionary {
 
     //自訂程式
     static final String[] tips = {"你會什麼", "你會做什麼", "提示", "tip", "功能", "你可以幫我什麼", "說明", "哈囉", "哈嚕",
-            "跟我講話", "Sony", "羅敏", "你還會什麼", "你還會做什麼"};
+            "跟我講話", "Sony", "羅敏", "你還會什麼", "你還會做什麼","你為什麼"};
     static final String[] Operation = {"幫我算", "泡菜", "Watson", "花生", "哇省", "防衛省", "蘭花繩", "幫我省"};
     static final String[] Operation2 = {"多少錢", "多少"};
     static final String[] 故事 = {"故事", "郭書", "讀書", "gosu", "二叔", "溝鼠", "購書", "過數", "複數", "布書", "讀書", "告書"};
@@ -35,20 +35,21 @@ class KeyDictionary {
     static final String[] Twitter = {"Twitter", "推特", "printer", "音特"};
     static final String[] Messenger = {"fb訊息", "Messenger", "fb聊天", "fb聊天室"};
     //開Youtube的
+    static final String[] 我要看 = {"我要看", "我想看"};
     static final String[] 民視 = {"民視", "冰系", "菲律賓西", "win7", "灰林溪"};
     static final String[] 中視 = {"中視", "東西", "不一定西", "中西", "call c"};
     static final String[] 華視 = {"華視", "花溪", "花絮"};
     static final String[] 台視 = {"台視", "大安溪", "黛西", "袋戲", "代戲"};
-    static final String[] 公視 = {"公視"};
+    static final String[] 公視 = {"公視","公司","公式"};
     static final String[] 東森 = {"東森"};
     static final String[] 三立 = {"三立"};
-    static final String[] 中天 = {"中天"};
+    static final String[] 中天 = {"中天","中間"};
     static final String[] 滾石老歌 = {"老歌", "滾石老歌"};
-    static final String[] 我要看 = {"我要看", "我想看"};
+
     //爬蟲
     static final String[] 大福彩 = {"大福彩"};
     static final String[] 威力彩 = {"威力彩"};
-    static final String[] 大樂透 = {"大樂透"};
+    static final String[] 大樂透 = {"大樂透Check"};
     static final String[] 發票 = {"發票"};
     //開瀏覽器
     static final String[] 開Chrome搜尋 = {"幫我找", "幫我查", "我想找", "我想查", "我要查", "我要找", "澎湖找"};

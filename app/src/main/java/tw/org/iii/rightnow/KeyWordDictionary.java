@@ -26,7 +26,7 @@ class KeyWordDictionary {
     static final String Messenger = "Messenger";
     static final String 卡提諾 = "卡提諾";
     static final String 威力彩 = "威力彩";
-    static final String 大樂透 = "大樂透";
+    static final String 大樂透 = "大樂透Check";
     static final String 大福彩 = "大福彩";
     static final String 搜尋Youtube影片 = "我要看";
     static final String 台視 = "台視";

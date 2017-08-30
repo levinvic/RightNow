@@ -45,6 +45,8 @@ public class BOTActivityEvent extends Activity {
 
             String page = html.toString();
 
+            recipt +="本期發票中獎號碼\n";
+
             String key = "<td class=\"title\">特別獎</td>                                <td><span class=\"t18Red\">";
             int start = page.indexOf(key) + key.length();
             recipt += "特別獎:" + page.substring(start, start + 8) + "\n";
@@ -129,7 +131,42 @@ public class BOTActivityEvent extends Activity {
         return powerLottery;
     }
 
-    //大樂透
+    public Boolean 大樂透Check(String StringInput){
+        Boolean biglottery = false;
+        for (int i = 0; i < KeyDictionary.大樂透.length; i++) {
+            if (StringInput.indexOf(KeyDictionary.大樂透[i]) != -1)
+                biglottery = true;
+        }
+        return biglottery;
+    }
+    public Boolean 大福彩Check(String StringInput){
+        Boolean bigColor = false;
+        for (int i = 0; i < KeyDictionary.大福彩.length; i++) {
+            if (StringInput.indexOf(KeyDictionary.大福彩[i]) != -1)
+                bigColor = true;
+        }
+        return bigColor;
+    }
+    public Boolean 威力彩Check(String StringInput){
+        Boolean PowerCheck = false;
+        for (int i = 0; i < KeyDictionary.威力彩.length; i++) {
+            if (StringInput.indexOf(KeyDictionary.威力彩[i]) != -1)
+                PowerCheck = true;
+        }
+        return PowerCheck;
+    }
+
+    public Boolean 說明Check(String StringInput){
+        Boolean tipCheck = false;
+        for (int i = 0; i < KeyDictionary.tips.length; i++) {
+            if (StringInput.indexOf(KeyDictionary.tips[i]) != -1)
+                tipCheck = true;
+        }
+        return tipCheck;
+    }
+
+
+    //大樂透Check
     public String BigLottery() {
 
         String powerLottery = "";
@@ -155,7 +192,7 @@ public class BOTActivityEvent extends Activity {
 
             String key = "<span id=\"L649DrawTerm\">";
             int start = page.indexOf(key) + key.length();
-            powerLottery += "大樂透\n第: " + page.substring(start, start + 9) + " 期\n";
+            powerLottery += "大樂透Check\n第: " + page.substring(start, start + 9) + " 期\n";
 
             String key2 = "<td class=\"even\">" +
                     "                                    依大小順序排列：";
@@ -688,6 +725,8 @@ public class BOTActivityEvent extends Activity {
         }
         return 附近的Check;
     }
+
+
 
 
     public Boolean Operation(String StringInput) {

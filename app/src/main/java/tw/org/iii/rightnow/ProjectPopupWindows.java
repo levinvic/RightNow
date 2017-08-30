@@ -99,7 +99,7 @@ public class ProjectPopupWindows extends PopupWindow {
         DS.append(highlight("\"發票\"\n", Color.YELLOW, 70));
         DS.append("助理將列出最新一期的發票號碼\n");
         DS.append("※除發票外還有\n");
-        DS.append(highlight("\"大樂透、大福彩、威力彩\"\n", Color.YELLOW, 70));
+        DS.append(highlight("\"大樂透Check、大福彩、威力彩\"\n", Color.YELLOW, 70));
 
         //外部功能類(需安裝)
         DS.append(highlight("外部功能(需安裝):\n",Color.RED,70));

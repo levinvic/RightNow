@@ -3,6 +3,9 @@ package tw.org.iii.rightnow;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,7 +25,6 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
-import android.support.transition.Visibility;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -225,6 +227,8 @@ public class Live2dTop extends AppCompatActivity implements
                 //分析輸入文字, 輸出成關鍵字存在一個字串變數中, 一次性搜尋
                 KeyWord = SearchWord.SEARCH(ResList.get(0));
 
+                notificationaction();
+
                 //TODO 判斷String關鍵字
                 switch (KeyWord) {
                     //TODO 整合性功能
@@ -398,7 +402,6 @@ public class Live2dTop extends AppCompatActivity implements
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(it);
-                        finish();
                         break;
                     case KeyWordDictionary.在維基百科找資料:
                         String wikiSearchWord = ResList.get(0).replace("什麼是", "").replace("是什麼", "");
@@ -408,7 +411,6 @@ public class Live2dTop extends AppCompatActivity implements
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                        finish();
                         break;
                     case KeyWordDictionary.故事:
                         new BOTActivityEvent().store();
@@ -429,6 +431,7 @@ public class Live2dTop extends AppCompatActivity implements
                         //開啓圓形功能列
                         FloatWindowManager.getInstance().applyOrShowFloatWindow(this);
                         mapGo(new BOTActivityEvent().GoogleMapGuide(ResList.get(0)));
+                        finish();
                         break;
                     case KeyWordDictionary.tip:
                         new BOTActivityEvent().tip();
@@ -437,17 +440,17 @@ public class Live2dTop extends AppCompatActivity implements
                     case KeyWordDictionary.國語:
                         ttsNumberset = 0;
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
-                        nameId.setText("  壯年哈嚕  ");
+                        nameId.setText("  哈嚕小姐  ");
                         break;
                     case KeyWordDictionary.小女孩:
                         ttsNumberset = 1;
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
-                        nameId.setText("  幼年哈嚕  ");
+                        nameId.setText("  小女孩哈嚕  ");
                         break;
                     case KeyWordDictionary.台語:
                         ttsNumberset = 2;
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
-                        nameId.setText("  老年哈嚕  ");
+                        nameId.setText("  台語哈嚕  ");
                         break;
                     case KeyWordDictionary.附近的:
                         startSpeakVoice(ttsNumberset, tvdialog.getText().toString());
@@ -848,8 +851,8 @@ public class Live2dTop extends AppCompatActivity implements
         AlertDialog.Builder ad = new AlertDialog.Builder(Live2dTop.this);
         ad.setTitle("關閉訊息");
         ad.setMessage("您要離開了嗎");
-        startSpeakVoice(ttsNumberset, "您要離開了嗎");
-        ad.setPositiveButton("殘忍離開", btnOut_click);
+//        startSpeakVoice(ttsNumberset, "您要離開了嗎");
+        ad.setPositiveButton("離開APP", btnOut_click);
         Dialog message = ad.create();
         message.show();
     }
@@ -868,14 +871,37 @@ public class Live2dTop extends AppCompatActivity implements
         super.onResume();//Activity重開時Event
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onStop() {
+
+
         //開啓圓形功能列
         if (FloatWindowManager.getInstance().checkfloatwindowPermission(this) == true) {
             FloatWindowManager.getInstance().openFloatWindow(this);
         }
-
+        notificationaction();
+        finish();
         super.onStop();
+    }
+
+    //呼叫通知列指令，點擊後直接返回主頁，並將通知訊息消失掉
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    void notificationaction(){
+        final int notifyID = 1; // 通知的識別號碼
+        final boolean autoCancel = true; // 點擊通知後是否要自動移除掉通知
+
+        final int requestCode = notifyID; // PendingIntent的Request Code
+        final Intent intent = getIntent(); // 目前Activity的Intent
+        // ONE_SHOT：PendingIntent只使用一次；CANCEL_CURRENT：PendingIntent執行前會先結束掉之前的；
+        // NO_CREATE：沿用先前的PendingIntent，不建立新的PendingIntent；
+        // UPDATE_CURRENT：更新先前PendingIntent所帶的額外資料，並繼續沿用
+        final int flags = PendingIntent.FLAG_CANCEL_CURRENT;
+        final PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), requestCode, intent, flags); // 取得PendingIntent
+
+        final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE); // 取得系統的通知服務
+        final Notification notification = new Notification.Builder(getApplicationContext()).setSmallIcon(R.drawable.ic_haru).setContentTitle("哈嚕").setContentText("我在這裡喔").setContentIntent(pendingIntent).setAutoCancel(autoCancel).build(); // 建立通知
+        notificationManager.notify(notifyID, notification); // 發送通知
     }
 
     @Override
@@ -1006,10 +1032,13 @@ public class Live2dTop extends AppCompatActivity implements
                 //停止前面的話, 重新講話
                 tts.stop();
                 videoView.stopPlayback();
-
+                //將對話視窗關閉
+                tvdialog.setVisibility(View.GONE);
+                nameId.setVisibility(View.GONE);
+                //輸入語音初始化
                 Intent it = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                 it.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-//                it.putExtra(RecognizerIntent.EXTRA_PROMPT, "請說話......");
+                it.putExtra(RecognizerIntent.EXTRA_PROMPT, "請說話......");
                 startActivityForResult(it, 1);
             }
         });

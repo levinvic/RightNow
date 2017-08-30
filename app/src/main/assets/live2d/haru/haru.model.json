@@ -43,12 +43,12 @@
 		"tap_body":
 		[
 			{ "file":"motions/tapBody_00.mtn" , "sound":"sounds/tapBody_00.wav","fade_out":0},
-			{ "file":"motions/tapBody_01.mtn" , "sound":"sounds/tapBody_01.wav","fade_out":0},
+			{ "file":"motions/tapBody_03.mtn" ,"fade_out":0},
 			{ "file":"motions/tapBody_02.mtn" , "sound":"sounds/tapBody_02.wav","fade_out":0},
 			{ "file":"motions/tapBody_03.mtn" ,"fade_out":0},
 			{ "file":"motions/tapBody_04.mtn" ,"fade_out":0},
 			{ "file":"motions/tapBody_05.mtn" ,"fade_out":0},
-			{ "file":"motions/tapBody_06.mtn" ,"fade_out":0},
+			{ "file":"motions/tapBody_02.mtn" , "sound":"sounds/tapBody_06.wav","fade_out":0},
 			{ "file":"motions/tapBody_07.mtn" ,"fade_out":0},
 			{ "file":"motions/tapBody_08.mtn" ,"fade_out":0},
 			{ "file":"motions/tapBody_09.mtn" ,"fade_out":0}

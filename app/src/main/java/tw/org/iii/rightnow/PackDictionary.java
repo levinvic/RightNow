@@ -73,10 +73,10 @@ class PackDictionary {
     final static String tip22 = "你如果想看電視, 只要跟我說我要看\"台視\", 我就可以幫你開啓直播";
     final static String tip23 = "你如果想看電視, 只要跟我說我要看\"華視\", 我就可以幫你開啓直播";
     final static String tip24 = "想看中天直播嗎? 只要跟我說\"中天\",我就可以幫你開啓電視";
-    final static String tip25 = "想看中天直播嗎? 只要跟我說\"三立\",我就可以幫你開啓電視";
+    final static String tip25 = "想看三立直播嗎? 只要跟我說\"三立\",我就可以幫你開啓電視";
     final static String tip26 = "你如果想看電視, 只要跟我說我要看\"東森\", 我就可以幫你開啓直播";
     final static String tip27 = "你如果想看電視, 只要跟我說我要看\"公視\", 我就可以幫你開啓直播";
-    final static String tip28 = "如果你有買大樂透, 只要跟我說出\"大樂透\", 我就可以幫你找本期中獎號碼喔";
+    final static String tip28 = "如果你有買大樂透, 只要跟我說出\"大樂透Check\", 我就可以幫你找本期中獎號碼喔";
     final static String tip29 = "如果你有買大福彩, 只要跟我說出\"大福彩\", 我就可以幫你找本期中獎號碼喔";
     final static String tip30 = "如果你有買威力彩, 只要跟我說出\"威力彩\", 我就可以幫你找本期中獎號碼喔";
     final static String tip31 = "想看最狂新聞嗎? 只要跟我說\"卡提諾\", 就可以看到最狂的新聞喔";

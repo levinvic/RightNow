@@ -160,6 +160,12 @@ class SearchWord {
                 StringInput = KeyWordDictionary.東森;
             }
         }
+        //找Youtube影片
+        for (int i=0;i<KeyDictionary.我要看.length;i++) {
+            if (StringInput.indexOf(KeyDictionary.我要看[i]) != -1) {
+                StringInput = KeyWordDictionary.搜尋Youtube影片;
+            }
+        }
         //公視
         for (int i=0;i<KeyDictionary.公視.length;i++) {
             if (StringInput.indexOf(KeyDictionary.公視[i]) != -1) {
@@ -178,10 +184,11 @@ class SearchWord {
                 StringInput = KeyWordDictionary.故事;
             }
         }
-        //大樂透
+        //大樂透Check
         for (int i=0;i<KeyDictionary.大樂透.length;i++) {
             if (StringInput.indexOf(KeyDictionary.大樂透[i]) != -1) {
                 StringInput = KeyWordDictionary.大樂透;
+
             }
         }
         //發票
@@ -226,11 +233,7 @@ class SearchWord {
                 StringInput = KeyWordDictionary.在維基百科找資料;
             }
         }
-        for (int i=0;i<KeyDictionary.我要看.length;i++) {
-            if (StringInput.indexOf(KeyDictionary.我要看[i]) != -1) {
-                StringInput = KeyWordDictionary.搜尋Youtube影片;
-            }
-        }
+
         for (int i=0;i<KeyDictionary.台語.length;i++) {
             if (StringInput.indexOf(KeyDictionary.台語[i]) != -1) {
                 StringInput = KeyWordDictionary.台語;

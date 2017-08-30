@@ -3,7 +3,6 @@
  */
 package tw.org.iii.rightnow.FloatView;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -14,7 +13,6 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.speech.RecognizerIntent;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
@@ -269,6 +267,8 @@ public class FloatWindowManager {
                         }).create();
         dialog.show();
     }
+
+
 
     private interface OnConfirmResult {
         void confirmResult(boolean confirm);

@@ -7,6 +7,7 @@
 package tw.org.iii.rightnow.Live2D.sample;
 
 import android.opengl.GLSurfaceView;
+import android.os.Handler;
 import android.os.Looper;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ import tw.org.iii.rightnow.Live2D.android.SimpleImage;
  * LAppRendererはモデル描画と、そのためのOpenGL命令を集約したクラスです。
  *
  */
-public class LAppRenderer implements GLSurfaceView.Renderer {
+public class LAppRenderer extends Thread implements GLSurfaceView.Renderer {
 
     private LAppLive2DManager delegate;
 
@@ -50,7 +51,6 @@ public class LAppRenderer implements GLSurfaceView.Renderer {
         // 背景の作成
         setupBackground(context);
     }
-
 
     /*
      * OpenGL画面の変更時に呼ばれるイベント。
@@ -237,6 +237,8 @@ public class LAppRenderer implements GLSurfaceView.Renderer {
                 e.printStackTrace();
             }
         }
+
+
 
     }
 }
